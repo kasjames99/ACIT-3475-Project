@@ -1,0 +1,162 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>My Professional Portfolio</title>  
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">  
+    <link rel="stylesheet" href="./css/style.css">  
+    <script src="https://unpkg.com/github-calendar/dist/github-calendar.min.js"></script>  
+</head>  
+<body class="bg-gray-100 text-gray-800">  
+
+    <header class="bg-blue-600 text-white p-4">  
+        <nav class="container mx-auto flex flex-wrap justify-between items-center">  
+            <h1 class="text-2xl font-bold">My Portfolio</h1>  
+            <ul class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">  
+                <li><a href="#about" class="hover:underline">About Me</a></li>  
+                <li><a href="#projects" class="hover:underline">Projects</a></li>  
+                <li><a href="#github" class="hover:underline">GitHub Contributions</a></li>  
+                <li><a href="#contact" class="hover:underline">Contact</a></li>  
+                <li id="authButtonContainer">  
+                    <form id="loginForm" action="/auth/google" method="GET">  
+                        <button type="submit" class="bg-white text-blue-600 px-4 py-2 rounded" id="loginButton">Login</button>  
+                    </form>  
+                    <form id="logoutForm" action="/auth/logout" method="GET" class="hidden">  
+                        <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded" id="logoutButton">Logout</button>  
+                    </form>  
+                </li>  
+            </ul>  
+        </nav>  
+    </header>  
+
+    <main class="container mx-auto p-4">  
+        <section id="about" class="my-8">  
+            <h2 class="text-3xl font-semibold">About Me</h2>  
+            <p id="aboutText" class="mt-2"></p>  
+            <button id="editAbout" class="hidden bg-blue-500 text-white px-2 py-1 rounded">Edit</button>  
+            <img src="./images/profile.jpg" alt="Profile Picture" class="mt-4 rounded-full w-32 h-32 mx-auto md:mx-0">  
+        </section>  
+
+        <section id="projects" class="my-8">  
+            <h2 class="text-3xl font-semibold">Projects</h2>  
+            <button id="addProject" class="hidden bg-blue-500 text-white px-2 py-1 rounded">Add Project</button>  
+            <ul id="projectList" class="mt-2 space-y-4">  
+                <!-- Projects will be dynamically added here -->  
+            </ul>  
+            <form id="projectForm" class="hidden mt-4">  
+                <input type="text" id="projectTitle" placeholder="Project Title" class="border p-2 rounded mr-2" required>  
+                <input type="text" id="projectDescription" placeholder="Project Description" class="border p-2 rounded mr-2" required>  
+                <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Add Project</button>  
+            </form>  
+        </section>  
+
+        <section id="github" class="my-8">  
+            <h2 class="text-3xl font-semibold">GitHub Contributions</h2>  
+            <div class="calendar" style="width: 100%; height: 200px;"></div>  
+        </section>  
+
+        <section id="contact" class="my-8">  
+            <h2 class="text-3xl font-semibold">Contact</h2>  
+            <p class="mt-2">Feel free to reach out via email: <a href="mailto:your-email@example.com" class="text-blue-600">your-email@example.com</a></p>  
+        </section>  
+    </main>  
+
+    <footer class="bg-blue-600 text-white p-4 text-center">  
+        <p>&copy; 2024 My Portfolio. All rights reserved.</p>  
+    </footer>  
+
+    <script src="./js/main.js"></script>  
+    <script>  
+        // Function to get query parameters  
+        function getQueryParams() {  
+            const params = {};  
+            window.location.search.substring(1).split("&").forEach(function (pair) {  
+                const [key, value] = pair.split("=");  
+                params[decodeURIComponent(key)] = decodeURIComponent(value || '');  
+            });  
+            return params;  
+        }  
+
+        // Check if user is logged in and display their name  
+        const params = getQueryParams();  
+        if (params.name) {  
+            document.querySelector('h1').innerHTML += ` - Welcome, ${params.name}!`;  
+            document.getElementById('loginForm').classList.add('hidden');  
+            document.getElementById('logoutForm').classList.remove('hidden');  
+            document.getElementById('editAbout').classList.remove('hidden');  
+            document.getElementById('addProject').classList.remove('hidden');  
+            loadAboutMe();  
+            loadProjects();  
+        }  
+
+        // Load About Me text  
+        function loadAboutMe() {  
+            fetch('/api/about')  
+                .then(response => response.json())  
+                .then(data => {  
+                    document.getElementById('aboutText').innerText = data.about;  
+                });  
+        }  
+
+        // Load Projects  
+        function loadProjects() {  
+            fetch('/api/projects')  
+                .then(response => response.json())  
+                .then(data => {  
+                    const projectList = document.getElementById('projectList');  
+                    projectList.innerHTML = ''; // Clear existing projects  
+                    data.forEach(project => {  
+                        const li = document.createElement('li');  
+                        li.className = 'bg-white p-4 rounded shadow';  
+                        li.innerHTML = `<h3 class="font-bold">${project.title}</h3><p>${project.description}</p>`;  
+                        projectList.appendChild(li);  
+                    });  
+                });  
+        }  
+
+        // Handle About Me edit  
+        document.getElementById('editAbout').addEventListener('click', () => {  
+            const newAbout = prompt("Edit About Me:", document.getElementById('aboutText').innerText);  
+            if (newAbout) {  
+                fetch('/api/about', {  
+                    method: 'POST',  
+                    headers: {  
+                        'Content-Type': 'application/json'  
+                    },  
+                    body: JSON.stringify({ about: newAbout })  
+                })  
+                .then(response => response.json())  
+                .then(data => {  
+                    document.getElementById('aboutText').innerText = data.about;  
+                });  
+            }  
+        });  
+
+        // Handle Project Form Submission  
+        document.getElementById('projectForm').addEventListener('submit', function(event) {  
+            event.preventDefault();  
+            const title = document.getElementById('projectTitle').value;  
+            const description = document.getElementById('projectDescription').value;  
+
+            fetch('/api/projects', {  
+                method: 'POST',  
+                headers: {  
+                    'Content-Type': 'application/json'  
+                },  
+                body: JSON.stringify({ title, description })  
+            })  
+            .then(response => response.json())  
+            .then(data => {  
+                loadProjects(); // Reload projects  
+                document.getElementById('projectForm').reset(); // Reset form  
+            });  
+        });  
+
+        // Show project form when "Add Project" button is clicked  
+        document.getElementById('addProject').addEventListener('click', () => {  
+            document.getElementById('projectForm').classList.toggle('hidden');  
+        });  
+    </script>  
+</body>  
+</html>

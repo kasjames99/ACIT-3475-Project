@@ -1,0 +1,123 @@
+body {  
+  padding: 50px;  
+  font: 16px "Lucida Grande", Helvetica, Arial, sans-serif;  
+  background-color: #f4f4f4; /* Light gray background for better contrast */  
+  color: #333; /* Darker text for readability */  
+  line-height: 1.6; /* Improved line height for better readability */  
+}  
+
+a {  
+  color: yellowgreen; /* white for links */  
+  text-decoration: none; /* Remove underline */  
+  transition: color 0.3s ease; /* Smooth color transition */ 
+    
+}  
+
+a:hover {  
+  color: orangered; /* yellow on hover */  
+  text-decoration: underline; /* Underline on hover for clarity */  
+}  
+
+header {  
+  position: sticky;  
+  top: 0;  
+  z-index: 10;  
+  background-color: #343a40; /* Dark gray for header */  
+  color: white; /* White text for contrast */  
+  padding: 10px 20px; /* Padding for header */  
+}  
+
+nav ul {  
+  display: flex;  
+  justify-content: space-between;  
+  list-style: none;  
+  padding: 0;  
+  margin: 0;  
+}  
+
+nav ul li {  
+  margin: 0 15px;  
+}  
+
+section {  
+  padding: 40px 0;  
+  border-bottom: 1px solid #eaeaea; /* Divider between sections */  
+}  
+
+section:last-of-type {  
+  border-bottom: none; /* Remove border from last section */  
+}  
+
+h1, h2, h3 {  
+  color: #333; /* Consistent heading color */  
+}  
+
+h1 {  
+  font-size: 2.5rem; /* Larger font size for main title */  
+  margin-bottom: 20px; /* Space below title */  
+}  
+
+h2 {  
+  font-size: 2rem; /* Slightly smaller for section titles */  
+  margin-bottom: 15px; /* Space below section titles */  
+}  
+
+h3 {  
+  font-size: 1.5rem; /* Font size for project titles */  
+  margin-bottom: 10px; /* Space below project titles */  
+}  
+
+footer {  
+  position: relative;  
+  bottom: 0;  
+  width: 100%;  
+  padding: 20px; /* Padding for footer */  
+  background-color: #343a40; /* Dark gray for footer */  
+  color: white; /* White text for contrast */  
+  text-align: center; /* Centered text */  
+  margin-top: 20px; /* Space above footer */  
+}  
+
+/* Button Styles */  
+button {  
+  background-color: #007BFF; /* Soft blue for buttons */  
+  color: white; /* Button text color */  
+  border: none; /* Remove default border */  
+  padding: 10px 15px; /* Padding for buttons */  
+  border-radius: 5px; /* Rounded corners */  
+  cursor: pointer; /* Pointer cursor on hover */  
+  transition: background-color 0.3s ease; /* Smooth background transition */  
+}  
+
+button:hover {  
+  background-color: #0056b3; /* Darker blue on hover */  
+}  
+
+/* Responsive adjustments */  
+@media (max-width: 768px) {  
+  header {  
+      flex-direction: column;  
+      align-items: flex-start;  
+  }  
+
+  nav ul {  
+      flex-direction: column;  
+      align-items: flex-start;  
+  }  
+
+  nav ul li {  
+      margin-bottom: 10px;  
+  }  
+
+  h1 {  
+      font-size: 2rem; /* Adjust title size for smaller screens */  
+  }  
+
+  h2 {  
+      font-size: 1.5rem; /* Adjust section title size */  
+  }  
+
+  section {  
+      padding: 20px 0; /* Reduce padding for smaller screens */  
+  }  
+}
